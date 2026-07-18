@@ -1,4 +1,4 @@
-package com.edwart.rpgdatabase;
+package com.rpgdatabase;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

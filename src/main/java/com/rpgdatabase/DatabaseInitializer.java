@@ -1,4 +1,4 @@
-package com.edwart.rpgdatabase;
+package com.rpgdatabase;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -109,6 +109,14 @@ public class DatabaseInitializer {
         }
     }
 
+    public static void seedData() {
+        DatabaseManager.addPlayer(10);
+        DatabaseManager.addItem("Rusty Sword", "WEAPON", 10, 0);
+        DatabaseManager.addItem("Healing Potion", "CONSUMABLE", 0, 25);
+        DatabaseManager.addItemToInventory(1, 1, 1);
+        DatabaseManager.addItemToInventory(1, 2, 5);
+    }
+
     public static void initializeDatabase() {
 
         createDatabase();
@@ -116,6 +124,10 @@ public class DatabaseInitializer {
         createItemTable();
         createInventoryTable();
 
+        seedData();
+
         System.out.println("Database initialization complete.");
     }
+
+
 }
