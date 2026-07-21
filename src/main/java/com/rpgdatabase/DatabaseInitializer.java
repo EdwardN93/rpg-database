@@ -124,7 +124,7 @@ public class DatabaseInitializer {
         createItemTable();
         createInventoryTable();
 
-        seedData();
+//        seedData();
 
         System.out.println("Database initialization complete.");
     }

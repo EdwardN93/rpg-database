@@ -186,8 +186,20 @@ public class DatabaseManager {
         }
     }
 
-    public static void consumeItem(int playerId, int itemId) {
-        String sql = """
+    public static void consumeHealingPotion(int playerId, int itemId) {
+
+        Connection conn = null;
+
+        String getHealingSql = """
+            SELECT items.healing
+            FROM inventory
+            JOIN items ON inventory.item_id = items.id
+            WHERE inventory.player_id = ?
+            AND inventory.item_id = ?
+            AND inventory.quantity > 0
+            """;
+
+        String consumePotionSql = """
             UPDATE inventory
             SET quantity = quantity - 1
             WHERE player_id = ?
@@ -195,23 +207,98 @@ public class DatabaseManager {
             AND quantity > 0
             """;
 
-        try (
-                Connection conn = DatabaseConnection.connect();
-                PreparedStatement pstmt = conn.prepareStatement(sql)
-        ) {
-            pstmt.setInt(1, playerId);
-            pstmt.setInt(2, itemId);
+        String updatePlayerHpSql = """
+            UPDATE players
+            SET current_hp = LEAST(current_hp + ?, max_hp)
+            WHERE id = ?
+            """;
 
-            int rowsUpdated = pstmt.executeUpdate();
+        try {
 
-            if (rowsUpdated > 0) {
-                System.out.println("Item consumed!");
-            } else {
-                System.out.println("Item not found or quantity is 0.");
+            conn = DatabaseConnection.connect();
+
+            conn.setAutoCommit(false);
+
+            int healing;
+
+            try (PreparedStatement pstmt = conn.prepareStatement(getHealingSql)) {
+
+                pstmt.setInt(1, playerId);
+                pstmt.setInt(2, itemId);
+
+                ResultSet result = pstmt.executeQuery();
+
+                if (!result.next()) {
+                    throw new SQLException(
+                            "Potion not found or quantity is 0."
+                    );
+                }
+
+                healing = result.getInt("healing");
+
+                if (healing <= 0) {
+                    throw new SQLException(
+                            "This item cannot heal the player."
+                    );
+                }
             }
 
+            try (PreparedStatement pstmt = conn.prepareStatement(consumePotionSql)) {
+
+                pstmt.setInt(1, playerId);
+                pstmt.setInt(2, itemId);
+
+                int rowsUpdated = pstmt.executeUpdate();
+
+                if (rowsUpdated == 0) {
+                    throw new SQLException(
+                            "Potion could not be consumed."
+                    );
+                }
+            }
+
+            try (PreparedStatement pstmt = conn.prepareStatement(updatePlayerHpSql)) {
+
+                pstmt.setInt(1, healing);
+                pstmt.setInt(2, playerId);
+
+                int rowsUpdated = pstmt.executeUpdate();
+
+                if (rowsUpdated == 0) {
+                    throw new SQLException(
+                            "Player not found."
+                    );
+                }
+            }
+
+            conn.commit();
+
+            System.out.println(
+                    "Potion consumed! Healing: +" + healing
+            );
+
         } catch (SQLException e) {
+
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                    System.out.println("Transaction rolled back.");
+                } catch (SQLException rollbackException) {
+                    rollbackException.printStackTrace();
+                }
+            }
+
             e.printStackTrace();
+
+        } finally {
+
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
