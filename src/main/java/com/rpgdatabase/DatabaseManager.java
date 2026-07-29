@@ -5,91 +5,6 @@ import java.sql.*;
 
 public class DatabaseManager {
 
-        public static void addPlayer(int strength) {
-
-            String sql = """
-            INSERT INTO players (strength)
-            VALUES (?)
-            """;
-
-            try (
-                    Connection conn = DatabaseConnection.connect();
-                    PreparedStatement stmt = conn.prepareStatement(sql)
-            ) {
-                stmt.setInt(1, strength);
-                stmt.executeUpdate();
-
-                System.out.println("Player added");
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-    public static void getPlayers() {
-        String sql = """
-                    SELECT * FROM players;
-                """;
-
-        try(
-                Connection conn = DatabaseConnection.connect();
-                Statement stmt = conn.createStatement();
-                ResultSet result = stmt.executeQuery(sql);
-                ){
-            while(result.next()){
-                int id = result.getInt("id");
-                String name = result.getString("player_name");
-                int strength = result.getInt("strength");
-
-                System.out.println(id + " | " + name + " | " + strength );
-            }
-
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
-
-    public static void updatePlayer(int id, int strength) {
-        String sql = """
-                    UPDATE players
-                    SET strength = ?
-                    WHERE id = ?
-                """;
-        try(
-                Connection conn = DatabaseConnection.connect();
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                ){
-            stmt.setInt(1, strength);
-            stmt.setInt(2, id);
-            stmt.executeUpdate();
-
-            System.out.println("Player updated");
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
-
-    public static void deletePlayer(int id) {
-        String sql = """
-                DELETE FROM players
-                WHERE ID = ?
-                """;
-
-        try(
-                Connection conn = DatabaseConnection.connect();
-                PreparedStatement stmt = conn.prepareStatement(sql)
-                ){
-            stmt.setInt(1, id);
-
-            stmt.executeUpdate();
-
-            System.out.println("Player deleted" );
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void addItem(
             String name,
             String type,
@@ -193,13 +108,12 @@ public class DatabaseManager {
                 int itemValue =
                         result.getInt("item_value");
 
-                System.out.println(
-                        playerName + " | "
-                                + itemName + " | "
-                                + itemDescription + " | "
-                                + quantity + " | "
-                                + itemValue
-                );
+                System.out.println("--------------------------------------------");
+                System.out.println("Player      : " + playerName);
+                System.out.println("Item        : " + itemName);
+                System.out.println("Description : " + itemDescription);
+                System.out.println("Quantity    : " + quantity);
+                System.out.println("Value       : " + itemValue + " ore");
             }
 
         } catch (SQLException e) {

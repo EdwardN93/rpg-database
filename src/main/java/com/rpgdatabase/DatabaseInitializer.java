@@ -1,9 +1,6 @@
 package com.rpgdatabase;
 
-import io.github.cdimascio.dotenv.Dotenv;
-
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -110,7 +107,7 @@ public class DatabaseInitializer {
     }
 
     public static void seedData() {
-        DatabaseManager.addPlayer(10);
+        PlayerRepository.addPlayer(10);
         DatabaseManager.addItem(
                 "Rusty Sword",
                 "WEAPON",
@@ -147,7 +144,7 @@ public class DatabaseInitializer {
         createItemTable();
         createInventoryTable();
 
-        seedData();
+//        seedData();
 
         System.out.println("Database initialization complete.");
     }
