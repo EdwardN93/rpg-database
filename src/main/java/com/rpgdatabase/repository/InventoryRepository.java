@@ -1,71 +1,13 @@
-package com.rpgdatabase;
+package com.rpgdatabase.repository;
 
+import com.rpgdatabase.DatabaseConnection;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class DatabaseManager {
-
-    public static void addItem(
-            String name,
-            String type,
-            int damage,
-            int healing,
-            String itemDescription,
-            int itemValue
-    ) {
-        String sql = """
-            INSERT INTO items (
-                item_name,
-                type,
-                damage,
-                healing,
-                item_description,
-                item_value
-            )
-            VALUES (?, ?, ?, ?, ?, ?)
-            """;
-
-        try (
-                Connection conn = DatabaseConnection.connect();
-                PreparedStatement pstmt = conn.prepareStatement(sql)
-        ) {
-            pstmt.setString(1, name);
-            pstmt.setString(2, type);
-            pstmt.setInt(3, damage);
-            pstmt.setInt(4, healing);
-            pstmt.setString(5, itemDescription);
-            pstmt.setInt(6, itemValue);
-
-            pstmt.executeUpdate();
-
-            System.out.println("Item added");
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void addItemToInventory(int playerId, int itemId, int quantity) {
-        String sql = """
-                    INSERT INTO inventory (
-                        player_id,
-                        item_id,
-                        quantity
-                    ) values (?, ?, ?)
-                """;
-
-        try(
-                Connection conn = DatabaseConnection.connect();
-                PreparedStatement pstmt = conn.prepareStatement(sql);
-                ){
-            pstmt.setInt(1, playerId);
-            pstmt.setInt(2, itemId);
-            pstmt.setInt(3, quantity);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+public class InventoryRepository {
 
     public static void showInventory(int playerId) {
 
@@ -116,6 +58,29 @@ public class DatabaseManager {
                 System.out.println("Value       : " + itemValue + " ore");
             }
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void addItemToInventory(int playerId, int itemId, int quantity) {
+        String sql = """
+                    INSERT INTO inventory (
+                        player_id,
+                        item_id,
+                        quantity
+                    ) values (?, ?, ?)
+                """;
+
+        try(
+                Connection conn = DatabaseConnection.connect();
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+        ){
+            pstmt.setInt(1, playerId);
+            pstmt.setInt(2, itemId);
+            pstmt.setInt(3, quantity);
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }

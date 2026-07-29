@@ -1,5 +1,9 @@
 package com.rpgdatabase;
 
+import com.rpgdatabase.repository.InventoryRepository;
+import com.rpgdatabase.repository.ItemRepository;
+import com.rpgdatabase.repository.PlayerRepository;
+
 import java.util.Scanner;
 
 public class Main {
@@ -35,7 +39,7 @@ public class Main {
 
                 case 1:
                     System.out.println();
-                    DatabaseManager.showInventory(1);
+                    InventoryRepository.showInventory(1);
                     break;
 
                 case 2:
@@ -45,7 +49,7 @@ public class Main {
 
                 case 3:
                     System.out.println();
-                    DatabaseManager.consumeHealingPotion(1, 2);
+                    InventoryRepository.consumeHealingPotion(1, 2);
                     break;
 
                 case 4:
@@ -98,6 +102,6 @@ public class Main {
         System.out.println("Item's value: ");
         int itemValue = Integer.parseInt(sc.nextLine());
 
-        DatabaseManager.addItem(itemName, itemType, damage, healing, itemDescription, itemValue);
+        ItemRepository.addItem(itemName, itemType, damage, healing, itemDescription, itemValue);
     }
 }

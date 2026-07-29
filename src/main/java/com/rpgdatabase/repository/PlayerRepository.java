@@ -1,4 +1,6 @@
-package com.rpgdatabase;
+package com.rpgdatabase.repository;
+
+import com.rpgdatabase.DatabaseConnection;
 
 import java.sql.*;
 

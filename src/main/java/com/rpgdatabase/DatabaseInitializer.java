@@ -1,5 +1,9 @@
 package com.rpgdatabase;
 
+import com.rpgdatabase.repository.InventoryRepository;
+import com.rpgdatabase.repository.ItemRepository;
+import com.rpgdatabase.repository.PlayerRepository;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -108,7 +112,7 @@ public class DatabaseInitializer {
 
     public static void seedData() {
         PlayerRepository.addPlayer(10);
-        DatabaseManager.addItem(
+        ItemRepository.addItem(
                 "Rusty Sword",
                 "WEAPON",
                 10,
@@ -116,7 +120,7 @@ public class DatabaseInitializer {
                 "An old rusty sword. Better than fighting with bare hands.",
                 15);
 
-        DatabaseManager.addItem(
+        ItemRepository.addItem(
                 "Healing Potion",
                 "CONSUMABLE",
                 0,
@@ -124,7 +128,7 @@ public class DatabaseInitializer {
                 "Restores 25 HP.",
                 25);
 
-        DatabaseManager.addItem(
+        ItemRepository.addItem(
                 "Old Bow",
                 "WEAPON",
                 15,
@@ -132,9 +136,9 @@ public class DatabaseInitializer {
                 "A very old bow.",
                 10);
 
-        DatabaseManager.addItemToInventory(1, 1, 1);
-        DatabaseManager.addItemToInventory(1, 2, 5);
-        DatabaseManager.addItemToInventory(1, 3, 1);
+        InventoryRepository.addItemToInventory(1, 1, 1);
+        InventoryRepository.addItemToInventory(1, 2, 5);
+        InventoryRepository.addItemToInventory(1, 3, 1);
     }
 
     public static void initializeDatabase() {
