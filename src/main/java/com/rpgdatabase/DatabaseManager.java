@@ -90,33 +90,44 @@ public class DatabaseManager {
         }
     }
 
-    public static void addItem(String name, String type, int damage, int healing) {
-            String sql = """
-                    INSERT INTO items (
-                        item_name,
-                        type,
-                        damage,
-                        healing
-                    ) 
-                    values (?, ?, ?, ?)
-                    """;
+    public static void addItem(
+            String name,
+            String type,
+            int damage,
+            int healing,
+            String itemDescription,
+            int itemValue
+    ) {
+        String sql = """
+            INSERT INTO items (
+                item_name,
+                type,
+                damage,
+                healing,
+                item_description,
+                item_value
+            )
+            VALUES (?, ?, ?, ?, ?, ?)
+            """;
 
-            try(
-                    Connection conn = DatabaseConnection.connect();
-                    PreparedStatement pstmt = conn.prepareStatement(sql);
-                    ){
-                pstmt.setString(1, name);
-                pstmt.setString(2, type);
-                pstmt.setInt(3, damage);
-                pstmt.setInt(4, healing);
+        try (
+                Connection conn = DatabaseConnection.connect();
+                PreparedStatement pstmt = conn.prepareStatement(sql)
+        ) {
+            pstmt.setString(1, name);
+            pstmt.setString(2, type);
+            pstmt.setInt(3, damage);
+            pstmt.setInt(4, healing);
+            pstmt.setString(5, itemDescription);
+            pstmt.setInt(6, itemValue);
 
-                pstmt.executeUpdate();
+            pstmt.executeUpdate();
 
-                System.out.println("Item added");
+            System.out.println("Item added");
 
-            } catch (SQLException e){
-                e.printStackTrace();
-            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void addItemToInventory(int playerId, int itemId, int quantity) {
@@ -146,6 +157,8 @@ public class DatabaseManager {
         String sql = """
             SELECT players.player_name,
                    items.item_name,
+                   items.item_description,
+                   items.item_value,
                    inventory.quantity
             FROM inventory
             JOIN players
@@ -174,10 +187,18 @@ public class DatabaseManager {
                 int quantity =
                         result.getInt("quantity");
 
+                String itemDescription =
+                        result.getString("item_description");
+
+                int itemValue =
+                        result.getInt("item_value");
+
                 System.out.println(
                         playerName + " | "
                                 + itemName + " | "
-                                + quantity
+                                + itemDescription + " | "
+                                + quantity + " | "
+                                + itemValue
                 );
             }
 

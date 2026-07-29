@@ -24,6 +24,7 @@ public class Main {
             System.out.println("1. Open inventory");
             System.out.println("2. Show players");
             System.out.println("3. Consume Healing Potion");
+            System.out.println("4. Add new item");
             System.out.println("0. Exit");
 
             System.out.print("Enter option: ");
@@ -47,6 +48,11 @@ public class Main {
                     DatabaseManager.consumeHealingPotion(1, 2);
                     break;
 
+                case 4:
+                    System.out.println();
+                    addItem(sc);
+                    break;
+
                 case 0:
                     System.out.println("Exiting...");
                     return;
@@ -55,5 +61,43 @@ public class Main {
                     System.out.println("Please enter a valid option.");
             }
         }
+    }
+
+    public static void addItem(Scanner sc) {
+
+        System.out.println("Name of the item: ");
+        String itemName = sc.nextLine();
+
+        System.out.println("Write the type of item: 'CONSUMABLE' or 'WEAPON'");
+        String itemType = sc.nextLine().toUpperCase();
+
+        int healing;
+        int damage;
+
+        if (itemType.equals("CONSUMABLE")) {
+
+            System.out.println("How much healing does item give: ");
+            healing = Integer.parseInt(sc.nextLine());
+            damage = 0;
+
+        } else if (itemType.equals("WEAPON")) {
+
+            System.out.println("How much damage does item have: ");
+            damage = Integer.parseInt(sc.nextLine());
+            healing = 0;
+
+        } else {
+
+            System.out.println("Invalid item type.");
+            return;
+        }
+
+        System.out.println("Item's description: ");
+        String itemDescription = sc.nextLine();
+
+        System.out.println("Item's value: ");
+        int itemValue = Integer.parseInt(sc.nextLine());
+
+        DatabaseManager.addItem(itemName, itemType, damage, healing, itemDescription, itemValue);
     }
 }

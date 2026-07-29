@@ -1,5 +1,7 @@
 package com.rpgdatabase;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -9,16 +11,12 @@ public class DatabaseInitializer {
 
     public static void createDatabase() {
 
-        String url = "jdbc:mariadb://localhost:3306/";
-        String user = "root";
-        String password = "";
-
         String sql = """
-                CREATE DATABASE IF NOT EXISTS game_db
-                """;
+            CREATE DATABASE IF NOT EXISTS game_db
+            """;
 
         try (
-                Connection conn = DriverManager.getConnection(url, user, password);
+                Connection conn = DatabaseConnection.connectToServer();
                 Statement stmt = conn.createStatement()
         ) {
             stmt.execute(sql);
@@ -62,14 +60,16 @@ public class DatabaseInitializer {
     public static void createItemTable() {
 
         String sql = """
-                CREATE TABLE IF NOT EXISTS items (
-                    id INT PRIMARY KEY AUTO_INCREMENT,
-                    item_name VARCHAR(255) NOT NULL,
-                    type VARCHAR(50) NOT NULL,
-                    damage INT DEFAULT 0,
-                    healing INT DEFAULT 0
-                )
-                """;
+            CREATE TABLE IF NOT EXISTS items (
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                item_name VARCHAR(255) NOT NULL,
+                type VARCHAR(50) NOT NULL,
+                damage INT DEFAULT 0,
+                healing INT DEFAULT 0,
+                item_description VARCHAR(255) NOT NULL,
+                item_value INT DEFAULT 0
+            )
+            """;
 
         try (
                 Connection conn = DatabaseConnection.connect();
@@ -111,10 +111,33 @@ public class DatabaseInitializer {
 
     public static void seedData() {
         DatabaseManager.addPlayer(10);
-        DatabaseManager.addItem("Rusty Sword", "WEAPON", 10, 0);
-        DatabaseManager.addItem("Healing Potion", "CONSUMABLE", 0, 25);
+        DatabaseManager.addItem(
+                "Rusty Sword",
+                "WEAPON",
+                10,
+                0,
+                "An old rusty sword. Better than fighting with bare hands.",
+                15);
+
+        DatabaseManager.addItem(
+                "Healing Potion",
+                "CONSUMABLE",
+                0,
+                25,
+                "Restores 25 HP.",
+                25);
+
+        DatabaseManager.addItem(
+                "Old Bow",
+                "WEAPON",
+                15,
+                0,
+                "A very old bow.",
+                10);
+
         DatabaseManager.addItemToInventory(1, 1, 1);
         DatabaseManager.addItemToInventory(1, 2, 5);
+        DatabaseManager.addItemToInventory(1, 3, 1);
     }
 
     public static void initializeDatabase() {
@@ -124,7 +147,7 @@ public class DatabaseInitializer {
         createItemTable();
         createInventoryTable();
 
-//        seedData();
+        seedData();
 
         System.out.println("Database initialization complete.");
     }
