@@ -3,6 +3,7 @@ package com.rpgdatabase;
 import com.rpgdatabase.repository.InventoryRepository;
 import com.rpgdatabase.repository.ItemRepository;
 import com.rpgdatabase.repository.PlayerRepository;
+import com.rpgdatabase.services.PlayerService;
 
 import java.util.Scanner;
 
@@ -29,6 +30,7 @@ public class Main {
             System.out.println("2. Show players");
             System.out.println("3. Consume Healing Potion");
             System.out.println("4. Add new item");
+            System.out.println("5. Gain experience");
             System.out.println("0. Exit");
 
             System.out.print("Enter option: ");
@@ -55,6 +57,21 @@ public class Main {
                 case 4:
                     System.out.println();
                     addItem(sc);
+                    break;
+
+                case 5:
+                    System.out.println();
+
+                    System.out.print("Player ID: ");
+                    int playerId = Integer.parseInt(sc.nextLine());
+
+                    System.out.print("Experience gained: ");
+                    int gainedExperience = Integer.parseInt(sc.nextLine());
+
+                    PlayerService.gainExperience(
+                            playerId,
+                            gainedExperience
+                    );
                     break;
 
                 case 0:
