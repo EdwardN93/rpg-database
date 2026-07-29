@@ -1,5 +1,6 @@
 package com.rpgdatabase.services;
 
+import com.rpgdatabase.enums.Attribute;
 import com.rpgdatabase.model.Player;
 import com.rpgdatabase.repository.PlayerRepository;
 
@@ -112,52 +113,92 @@ public class PlayerService {
         System.out.println();
     }
 
-    public static void trainStrength(
+    public static void trainAttribute(
             int playerId,
-            int strengthPoints
-    ){
+            Attribute attribute,
+            int points
+    ) {
+
         Player player = PlayerRepository.getPlayerById(playerId);
 
-        if(player == null){
-            System.out.println("Player not found");
+        if (player == null) {
+            System.out.println("Player not found.");
             return;
         }
 
-        if(strengthPoints <= 0){
-            System.out.println("Strength must be greater than 0.");
+        if (points <= 0) {
+            System.out.println("Points must be greater than 0.");
             return;
         }
 
-        if(player.getLearningPoints() < strengthPoints){
+        if (player.getLearningPoints() < points) {
             System.out.println("Not enough learning points.");
             return;
         }
 
-        player.setStrength(
-                player.getStrength() + strengthPoints
-        );
+        switch (attribute) {
+
+            case STRENGTH:
+                player.setStrength(
+                        player.getStrength() + points
+                );
+                break;
+
+//            TO IMPLEMENT DEXTERITY
+//            case DEXTERITY:
+//                player.setDexterity(
+//                        player.getDexterity() + points
+//                );
+//                break;
+
+            case MAX_MANA:
+                player.setMaxMana(
+                        player.getMaxMana() + points
+                );
+                break;
+
+            default:
+                System.out.println("Invalid attribute.");
+                return;
+        }
 
         player.setLearningPoints(
-                player.getLearningPoints() - strengthPoints
+                player.getLearningPoints() - points
         );
 
         boolean updated = PlayerRepository.updatePlayer(player);
 
-        System.out.println(
-                player.getPlayerName()
-                        + " increased Strength by "
-                        + strengthPoints
-                        + "."
-        );
+        if (!updated) {
+            System.out.println("Training could not be saved.");
+            return;
+        }
 
         System.out.println(
-                "Current Strength: "
-                        + player.getStrength()
+                player.getPlayerName()
+                        + " increased "
+                        + attribute
+                        + " by "
+                        + points
+                        + "."
         );
 
         System.out.println(
                 "Learning Points remaining: "
                         + player.getLearningPoints()
         );
+    }
+
+    public static void trainStrength(
+            int id,
+            int points
+    ) {
+        trainAttribute(id, Attribute.STRENGTH, points);
+    }
+
+    public static void trainMaxMana(
+            int id,
+            int points
+    ) {
+        trainAttribute(id, Attribute.MAX_MANA, points);
     }
 }

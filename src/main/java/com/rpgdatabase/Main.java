@@ -1,5 +1,6 @@
 package com.rpgdatabase;
 
+import com.rpgdatabase.enums.Attribute;
 import com.rpgdatabase.repository.InventoryRepository;
 import com.rpgdatabase.repository.ItemRepository;
 import com.rpgdatabase.repository.PlayerRepository;
@@ -32,6 +33,7 @@ public class Main {
             System.out.println("4. Add new item");
             System.out.println("5. Gain experience");
             System.out.println("6. Train Strength");
+            System.out.println("7. Train Max Mana");
             System.out.println("0. Exit");
 
             System.out.print("Enter option: ");
@@ -76,18 +78,39 @@ public class Main {
                     break;
                 }
                 case 6: {
+                    System.out.println();
+
                     System.out.print("Player ID: ");
                     int playerId = Integer.parseInt(sc.nextLine());
 
                     System.out.print(
                             "How many Strength points do you want to learn? "
                     );
-                    int strengthPoints = Integer.parseInt(sc.nextLine());
+                    int points = Integer.parseInt(sc.nextLine());
 
                     PlayerService.trainStrength(
                             playerId,
-                            strengthPoints
+                            points
                     );
+
+                    break;
+                }
+                case 7: {
+                    System.out.println();
+
+                    System.out.print("Player ID: ");
+                    int playerId = Integer.parseInt(sc.nextLine());
+
+                    System.out.print(
+                            "How many Max Mana points do you want to learn? "
+                    );
+                    int points = Integer.parseInt(sc.nextLine());
+
+                    PlayerService.trainMaxMana(
+                            playerId,
+                            points
+                    );
+
                     break;
                 }
                 case 0:
