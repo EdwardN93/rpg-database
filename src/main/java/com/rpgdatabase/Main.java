@@ -31,6 +31,7 @@ public class Main {
             System.out.println("3. Consume Healing Potion");
             System.out.println("4. Add new item");
             System.out.println("5. Gain experience");
+            System.out.println("6. Train Strength");
             System.out.println("0. Exit");
 
             System.out.print("Enter option: ");
@@ -59,7 +60,7 @@ public class Main {
                     addItem(sc);
                     break;
 
-                case 5:
+                case 5: {
                     System.out.println();
 
                     System.out.print("Player ID: ");
@@ -73,7 +74,22 @@ public class Main {
                             gainedExperience
                     );
                     break;
+                }
+                case 6: {
+                    System.out.print("Player ID: ");
+                    int playerId = Integer.parseInt(sc.nextLine());
 
+                    System.out.print(
+                            "How many Strength points do you want to learn? "
+                    );
+                    int strengthPoints = Integer.parseInt(sc.nextLine());
+
+                    PlayerService.trainStrength(
+                            playerId,
+                            strengthPoints
+                    );
+                    break;
+                }
                 case 0:
                     System.out.println("Exiting...");
                     return;

@@ -111,4 +111,53 @@ public class PlayerService {
         );
         System.out.println();
     }
+
+    public static void trainStrength(
+            int playerId,
+            int strengthPoints
+    ){
+        Player player = PlayerRepository.getPlayerById(playerId);
+
+        if(player == null){
+            System.out.println("Player not found");
+            return;
+        }
+
+        if(strengthPoints <= 0){
+            System.out.println("Strength must be greater than 0.");
+            return;
+        }
+
+        if(player.getLearningPoints() < strengthPoints){
+            System.out.println("Not enough learning points.");
+            return;
+        }
+
+        player.setStrength(
+                player.getStrength() + strengthPoints
+        );
+
+        player.setLearningPoints(
+                player.getLearningPoints() - strengthPoints
+        );
+
+        boolean updated = PlayerRepository.updatePlayer(player);
+
+        System.out.println(
+                player.getPlayerName()
+                        + " increased Strength by "
+                        + strengthPoints
+                        + "."
+        );
+
+        System.out.println(
+                "Current Strength: "
+                        + player.getStrength()
+        );
+
+        System.out.println(
+                "Learning Points remaining: "
+                        + player.getLearningPoints()
+        );
+    }
 }
