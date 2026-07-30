@@ -79,65 +79,6 @@ public class PlayerRepository {
         return null;
     }
 
-    public static void showPlayerStats(int playerId) {
-
-        Player player = getPlayerById(playerId);
-
-        if (player == null) {
-            System.out.println("Player not found.");
-            return;
-        }
-
-        System.out.println();
-        System.out.println("=============== PLAYER STATS ===============");
-        System.out.println();
-        System.out.printf("%-18s %s%n", "Name:", player.getPlayerName());
-        System.out.printf("%-18s %d%n", "Level:", player.getLevel());
-
-        System.out.printf(
-                "%-18s %d / %d%n",
-                "Experience:",
-                player.getExperience(),
-                player.getExperienceRequired()
-        );
-
-        System.out.printf("%-18s %d%n", "Learning Points:", player.getLearningPoints());
-
-        System.out.println();
-        System.out.println("---------------- ATTRIBUTES ----------------");
-
-        System.out.printf("%-18s %d / %d%n",
-                "HP:",
-                player.getCurrentHp(),
-                player.getMaxHp());
-
-        System.out.printf("%-18s %d / %d%n",
-                "Mana:",
-                player.getCurrentMana(),
-                player.getMaxMana());
-
-        System.out.printf("%-18s %d%n", "Strength:", player.getStrength());
-        System.out.printf("%-18s %d%n", "Armor:", player.getArmor());
-
-        System.out.println();
-        System.out.println("------------------ SKILLS ------------------");
-
-        // FUTURE IMPLEMENTATIONS
-        // System.out.printf("%-18s %d%n", "Dexterity:", player.getDexterity());
-        // System.out.printf("%-18s %s%n", "Faction:", player.getFaction());
-        // System.out.printf("%-18s %d%n", "Circle of Magic:", player.getCircleOfMagic());
-        // System.out.printf("%-18s %d%%%n", "One-Handed:", player.getOneHanded());
-        // System.out.printf("%-18s %d%%%n", "Two-Handed:", player.getTwoHanded());
-        // System.out.printf("%-18s %d%%%n", "Bow:", player.getBowSkill());
-        // System.out.printf("%-18s %d%%%n", "Crossbow:", player.getCrossbowSkill());
-        // System.out.printf("%-18s %s%n", "Smithing:", player.getSmithing());
-        // System.out.printf("%-18s %s%n", "Alchemy:", player.getAlchemy());
-
-        System.out.println();
-        System.out.println("============================================");
-    }
-
-
     public static void showPlayers() {
         String sql = """
                     SELECT id, player_name, level, strength 

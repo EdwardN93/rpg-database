@@ -51,7 +51,7 @@ public class Main {
                 case 2:
                     System.out.println();
 //                    PlayerRepository.showPlayers();
-                    PlayerRepository.showPlayerStats(1);
+                    PlayerService.showPlayerStats(1);
                     break;
 
                 case 3:
