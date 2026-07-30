@@ -11,6 +11,7 @@ public class Player {
     private int maxMana;
     private int learningPoints;
     private int experience;
+    private int experienceRequired;
     private int armor;
 
 
@@ -26,6 +27,7 @@ public class Player {
             int maxMana,
             int learningPoints,
             int experience,
+            int experienceRequired,
             int armor
     ) {
         this.id = id;
@@ -38,6 +40,7 @@ public class Player {
         this.maxMana = maxMana;
         this.learningPoints = learningPoints;
         this.experience = experience;
+        this.experienceRequired = experienceRequired;
         this.armor = armor;
     }
 
@@ -121,6 +124,14 @@ public class Player {
         this.experience = experience;
     }
 
+    public int getExperienceRequired() {
+        return experienceRequired;
+    }
+
+    public void setExperienceRequired(int experienceRequired) {
+        this.experienceRequired = experienceRequired;
+    }
+
     public int getArmor() {
         return armor;
     }
@@ -143,6 +154,7 @@ public class Player {
                 ", maxMana=" + maxMana +
                 ", learningPoints=" + learningPoints +
                 ", experience=" + experience +
+                ", experienceRequired=" + experienceRequired +
                 ", armor=" + armor +
                 '}';
     }

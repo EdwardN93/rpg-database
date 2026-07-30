@@ -43,6 +43,7 @@ public class DatabaseInitializer {
                     max_mana INT DEFAULT 10,
                     learning_points INT DEFAULT 0,
                     experience INT DEFAULT 0,
+                    experience_required INT DEFAULT 500,
                     armor INT DEFAULT 0
                 )
                 """;

@@ -64,24 +64,19 @@ public class PlayerService {
 
         System.out.println(
                 "Experience needed for next level: "
-                        + experienceForNextLevel(
-                        player.getLevel()
-                )
+                        + player.getExperienceRequired()
         );
     }
 
-    private static int experienceForNextLevel(int level) {
-        return 500 * level * (level + 1);
+    private static int experienceRequiredForLevel(int level) {
+        return 250 * level * (level + 1);
     }
 
     private static void checkLevelUp(Player player) {
 
-        while (
-                player.getExperience()
-                        >= experienceForNextLevel(
-                        player.getLevel()
-                )
-        ) {
+        while (player.getExperience()
+                >= experienceRequiredForLevel(player.getLevel() + 1)) {
+
             levelUp(player);
         }
     }
@@ -100,19 +95,18 @@ public class PlayerService {
                 player.getLearningPoints() + 10
         );
 
+        player.setExperienceRequired(
+                experienceRequiredForLevel(player.getLevel() + 1)
+        );
+
         System.out.println();
         System.out.println("LEVEL UP!");
+        System.out.println("New level: " + player.getLevel());
+        System.out.println("Maximum HP: " + player.getMaxHp());
+        System.out.println("Learning points: " + player.getLearningPoints());
         System.out.println(
-                "New level: "
-                        + player.getLevel()
-        );
-        System.out.println(
-                "Maximum HP: "
-                        + player.getMaxHp()
-        );
-        System.out.println(
-                "Learning points: "
-                        + player.getLearningPoints()
+                "Experience required: "
+                        + player.getExperienceRequired()
         );
         System.out.println();
     }

@@ -29,7 +29,7 @@ public class Main {
             System.out.println();
             System.out.println("=== RPG DATABASE MANAGER ===");
             System.out.println("1. Open inventory");
-            System.out.println("2. Show players");
+            System.out.println("2. Show Player Stats");
             System.out.println("3. Use consumable");
             System.out.println("4. Add new item");
             System.out.println("5. Gain experience");
@@ -50,7 +50,8 @@ public class Main {
 
                 case 2:
                     System.out.println();
-                    PlayerRepository.showPlayers();
+//                    PlayerRepository.showPlayers();
+                    PlayerRepository.showPlayerStats(1);
                     break;
 
                 case 3:
