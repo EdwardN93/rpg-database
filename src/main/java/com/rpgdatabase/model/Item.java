@@ -9,6 +9,7 @@ public class Item {
     private ItemType type;
     private int damage;
     private int healing;
+    private int manaRestore;
     private String itemDescription;
     private int itemValue;
 
@@ -18,6 +19,7 @@ public class Item {
             ItemType type,
             int damage,
             int healing,
+            int manaRestore,
             String itemDescription,
             int itemValue
     ){
@@ -26,6 +28,7 @@ public class Item {
         this.type = type;
         this.damage = damage;
         this.healing = healing;
+        this.manaRestore = manaRestore;
         this.itemDescription = itemDescription;
         this.itemValue = itemValue;
     }
@@ -69,6 +72,10 @@ public class Item {
     public void setHealing(int healing) {
         this.healing = healing;
     }
+
+    public int getManaRestore() { return manaRestore; }
+
+    public void setManaRestore(int manaRestore) { this.manaRestore = manaRestore ;}
 
     public String getItemDescription() {
         return itemDescription;

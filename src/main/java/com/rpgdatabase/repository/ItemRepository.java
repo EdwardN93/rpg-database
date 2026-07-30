@@ -18,6 +18,7 @@ public class ItemRepository {
                type,
                damage,
                healing,
+               mana_restore,
                item_description,
                item_value
         FROM items
@@ -38,6 +39,7 @@ public class ItemRepository {
                             ItemType.valueOf(rs.getString("type")),
                             rs.getInt("damage"),
                             rs.getInt("healing"),
+                            rs.getInt("mana_restore"),
                             rs.getString("item_description"),
                             rs.getInt("item_value")
                     );
@@ -55,6 +57,7 @@ public class ItemRepository {
             ItemType type,
             int damage,
             int healing,
+            int manaRestore,
             String itemDescription,
             int itemValue
     ) {
@@ -64,10 +67,11 @@ public class ItemRepository {
                 type,
                 damage,
                 healing,
+                mana_restore,
                 item_description,
                 item_value
             )
-            VALUES (?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             """;
 
         try (
@@ -78,8 +82,9 @@ public class ItemRepository {
             pstmt.setString(2, type.name());
             pstmt.setInt(3, damage);
             pstmt.setInt(4, healing);
-            pstmt.setString(5, itemDescription);
-            pstmt.setInt(6, itemValue);
+            pstmt.setInt(5, manaRestore);
+            pstmt.setString(6, itemDescription);
+            pstmt.setInt(7, itemValue);
 
             pstmt.executeUpdate();
 

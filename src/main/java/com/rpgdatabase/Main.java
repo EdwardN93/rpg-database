@@ -154,12 +154,17 @@ public class Main {
         }
 
         int healing;
+        int manaRestore;
         int damage;
 
         if (itemType == ItemType.CONSUMABLE) {
 
             System.out.println("How much healing does item give: ");
             healing = Integer.parseInt(sc.nextLine());
+
+            System.out.println("How much mana does item restore: ");
+            manaRestore = Integer.parseInt(sc.nextLine());
+
             damage = 0;
 
         } else if (itemType == ItemType.WEAPON) {
@@ -167,6 +172,7 @@ public class Main {
             System.out.println("How much damage does item have: ");
             damage = Integer.parseInt(sc.nextLine());
             healing = 0;
+            manaRestore = 0;
 
         } else {
             System.out.println("Invalid item type.");
@@ -184,6 +190,7 @@ public class Main {
                 itemType,
                 damage,
                 healing,
+                manaRestore,
                 itemDescription,
                 itemValue
         );

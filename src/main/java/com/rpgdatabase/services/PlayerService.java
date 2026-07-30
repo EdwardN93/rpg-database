@@ -206,55 +206,85 @@ public class PlayerService {
         trainAttribute(id, Attribute.MAX_MANA, points);
     }
 
-    public static void useConsumable(int playerId, int itemId){
+    public static void useConsumable(int playerId, int itemId) {
+
         Player player = PlayerRepository.getPlayerById(playerId);
         Item item = ItemRepository.getItemById(itemId);
 
-        if(player == null){
+        if (player == null) {
             System.out.println("Player not found.");
             return;
         }
 
-        if(item == null){
+        if (item == null) {
             System.out.println("Item not found.");
             return;
         }
 
-        if(item.getType() != ItemType.CONSUMABLE){
+        if (item.getType() != ItemType.CONSUMABLE) {
             System.out.println("This item is not consumable.");
             return;
         }
 
-        int quantity = InventoryRepository.getItemQuantity(playerId,itemId);
+        int quantity =
+                InventoryRepository.getItemQuantity(playerId, itemId);
 
-        if(quantity <= 0){
+        if (quantity <= 0) {
             System.out.println("Player does not have this item.");
-        }
-
-        if(player.getCurrentHp() == player.getMaxHp()){
-            System.out.println("Player already has full HP");
             return;
         }
 
-        int newHp = player.getCurrentHp() + item.getHealing();
+        int oldHp = player.getCurrentHp();
+        int oldMana = player.getCurrentMana();
 
-        if(newHp > player.getMaxHp()){
-            newHp = player.getMaxHp();
+        int newHp = Math.min(
+                oldHp + item.getHealing(),
+                player.getMaxHp()
+        );
+
+        int newMana = Math.min(
+                oldMana + item.getManaRestore(),
+                player.getMaxMana()
+        );
+
+        if (newHp == oldHp && newMana == oldMana) {
+            System.out.println("This consumable has no effect right now.");
+            return;
         }
 
+        int restoredHp = newHp - oldHp;
+        int restoredMana = newMana - oldMana;
+
         player.setCurrentHp(newHp);
+        player.setCurrentMana(newMana);
 
         PlayerRepository.updatePlayer(player);
         InventoryRepository.removeOneItem(playerId, itemId);
         InventoryRepository.deleteEmptyInventoryEntry(playerId, itemId);
 
         System.out.println(
-                player.getPlayerName() +
-                        " used " +
-                        item.getItemName() +
-                        " and restored " +
-                        item.getHealing() +
-                        " HP."
+                player.getPlayerName()
+                        + " used "
+                        + item.getItemName()
+                        + ". Restored "
+                        + restoredHp
+                        + " HP and "
+                        + restoredMana
+                        + " mana."
+        );
+
+        System.out.println(
+                "Current HP: "
+                        + player.getCurrentHp()
+                        + "/"
+                        + player.getMaxHp()
+        );
+
+        System.out.println(
+                "Current mana: "
+                        + player.getCurrentMana()
+                        + "/"
+                        + player.getMaxMana()
         );
     }
 }

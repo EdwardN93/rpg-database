@@ -68,6 +68,7 @@ public class DatabaseInitializer {
                 type VARCHAR(50) NOT NULL,
                 damage INT DEFAULT 0,
                 healing INT DEFAULT 0,
+                mana_restore INT DEFAULT 0,
                 item_description VARCHAR(255) NOT NULL,
                 item_value INT DEFAULT 0
             )
@@ -118,6 +119,7 @@ public class DatabaseInitializer {
                 ItemType.WEAPON,
                 10,
                 0,
+                0,
                 "An old rusty sword. Better than fighting with bare hands.",
                 15);
 
@@ -126,20 +128,44 @@ public class DatabaseInitializer {
                 ItemType.CONSUMABLE,
                 0,
                 25,
+                0,
                 "Restores 25 HP.",
                 25);
+
+        ItemRepository.addItem(
+                "Mana Potion",
+                ItemType.CONSUMABLE,
+                0,
+                0,
+                25,
+                "Restores 25 mana.",
+                20
+        );
+
+        ItemRepository.addItem(
+                "Elixir",
+                ItemType.CONSUMABLE,
+                0,
+                25,
+                25,
+                "Restores 25 HP and 25 mana.",
+                75
+        );
 
         ItemRepository.addItem(
                 "Old Bow",
                 ItemType.WEAPON,
                 15,
                 0,
+                0,
                 "A very old bow.",
                 10);
 
         InventoryRepository.addItemToInventory(1, 1, 1);
         InventoryRepository.addItemToInventory(1, 2, 5);
-        InventoryRepository.addItemToInventory(1, 3, 1);
+        InventoryRepository.addItemToInventory(1, 3, 5);
+        InventoryRepository.addItemToInventory(1, 4, 5);
+        InventoryRepository.addItemToInventory(1, 5, 1);
     }
 
     public static void initializeDatabase() {
