@@ -1,6 +1,7 @@
 package com.rpgdatabase;
 
 import com.rpgdatabase.enums.Attribute;
+import com.rpgdatabase.enums.ItemType;
 import com.rpgdatabase.repository.InventoryRepository;
 import com.rpgdatabase.repository.ItemRepository;
 import com.rpgdatabase.repository.PlayerRepository;
@@ -29,7 +30,7 @@ public class Main {
             System.out.println("=== RPG DATABASE MANAGER ===");
             System.out.println("1. Open inventory");
             System.out.println("2. Show players");
-            System.out.println("3. Consume Healing Potion");
+            System.out.println("3. Use consumable");
             System.out.println("4. Add new item");
             System.out.println("5. Gain experience");
             System.out.println("6. Train Strength");
@@ -54,7 +55,7 @@ public class Main {
 
                 case 3:
                     System.out.println();
-                    InventoryRepository.consumeHealingPotion(1, 2);
+                    useConsumable(sc);
                     break;
 
                 case 4:
@@ -123,31 +124,51 @@ public class Main {
         }
     }
 
+    public static void useConsumable(Scanner sc) {
+
+        System.out.println("Player ID: ");
+        int playerId = Integer.parseInt(sc.nextLine());
+
+        System.out.println("Item ID: ");
+        int itemId = Integer.parseInt(sc.nextLine());
+
+        PlayerService.useConsumable(playerId, itemId);
+    }
+
     public static void addItem(Scanner sc) {
 
         System.out.println("Name of the item: ");
         String itemName = sc.nextLine();
 
         System.out.println("Write the type of item: 'CONSUMABLE' or 'WEAPON'");
-        String itemType = sc.nextLine().toUpperCase();
+
+        ItemType itemType;
+
+        try {
+            itemType = ItemType.valueOf(
+                    sc.nextLine().trim().toUpperCase()
+            );
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid item type.");
+            return;
+        }
 
         int healing;
         int damage;
 
-        if (itemType.equals("CONSUMABLE")) {
+        if (itemType == ItemType.CONSUMABLE) {
 
             System.out.println("How much healing does item give: ");
             healing = Integer.parseInt(sc.nextLine());
             damage = 0;
 
-        } else if (itemType.equals("WEAPON")) {
+        } else if (itemType == ItemType.WEAPON) {
 
             System.out.println("How much damage does item have: ");
             damage = Integer.parseInt(sc.nextLine());
             healing = 0;
 
         } else {
-
             System.out.println("Invalid item type.");
             return;
         }
@@ -158,6 +179,13 @@ public class Main {
         System.out.println("Item's value: ");
         int itemValue = Integer.parseInt(sc.nextLine());
 
-        ItemRepository.addItem(itemName, itemType, damage, healing, itemDescription, itemValue);
+        ItemRepository.addItem(
+                itemName,
+                itemType,
+                damage,
+                healing,
+                itemDescription,
+                itemValue
+        );
     }
 }

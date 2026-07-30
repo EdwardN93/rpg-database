@@ -1,7 +1,11 @@
 package com.rpgdatabase.services;
 
 import com.rpgdatabase.enums.Attribute;
+import com.rpgdatabase.enums.ItemType;
+import com.rpgdatabase.model.Item;
 import com.rpgdatabase.model.Player;
+import com.rpgdatabase.repository.InventoryRepository;
+import com.rpgdatabase.repository.ItemRepository;
 import com.rpgdatabase.repository.PlayerRepository;
 
 public class PlayerService {
@@ -200,5 +204,57 @@ public class PlayerService {
             int points
     ) {
         trainAttribute(id, Attribute.MAX_MANA, points);
+    }
+
+    public static void useConsumable(int playerId, int itemId){
+        Player player = PlayerRepository.getPlayerById(playerId);
+        Item item = ItemRepository.getItemById(itemId);
+
+        if(player == null){
+            System.out.println("Player not found.");
+            return;
+        }
+
+        if(item == null){
+            System.out.println("Item not found.");
+            return;
+        }
+
+        if(item.getType() != ItemType.CONSUMABLE){
+            System.out.println("This item is not consumable.");
+            return;
+        }
+
+        int quantity = InventoryRepository.getItemQuantity(playerId,itemId);
+
+        if(quantity <= 0){
+            System.out.println("Player does not have this item.");
+        }
+
+        if(player.getCurrentHp() == player.getMaxHp()){
+            System.out.println("Player already has full HP");
+            return;
+        }
+
+        int newHp = player.getCurrentHp() + item.getHealing();
+
+        if(newHp > player.getMaxHp()){
+            newHp = player.getMaxHp();
+        }
+
+        player.setCurrentHp(newHp);
+
+        PlayerRepository.updatePlayer(player);
+        InventoryRepository.removeOneItem(playerId, itemId);
+        InventoryRepository.deleteEmptyInventoryEntry(playerId, itemId);
+
+        System.out.println(
+                player.getPlayerName() +
+                        " used " +
+                        item.getItemName() +
+                        " and restored " +
+                        item.getHealing() +
+                        " HP."
+        );
     }
 }

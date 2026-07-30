@@ -86,119 +86,75 @@ public class InventoryRepository {
         }
     }
 
-    public static void consumeHealingPotion(int playerId, int itemId) {
+    public static int getItemQuantity(int playerId, int itemId){
 
-        Connection conn = null;
+        String sql = """
+                SELECT quantity
+                FROM inventory
+                WHERE player_id = ?
+                  AND item_id = ?
+                """;
+        try(
+                Connection con = DatabaseConnection.connect();
+                PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+            ps.setInt(1, playerId);
+            ps.setInt(2, itemId);
 
-        String getHealingSql = """
-            SELECT items.healing
-            FROM inventory
-            JOIN items ON inventory.item_id = items.id
-            WHERE inventory.player_id = ?
-            AND inventory.item_id = ?
-            AND inventory.quantity > 0
-            """;
-
-        String consumePotionSql = """
-            UPDATE inventory
-            SET quantity = quantity - 1
-            WHERE player_id = ?
-            AND item_id = ?
-            AND quantity > 0
-            """;
-
-        String updatePlayerHpSql = """
-            UPDATE players
-            SET current_hp = LEAST(current_hp + ?, max_hp)
-            WHERE id = ?
-            """;
-
-        try {
-
-            conn = DatabaseConnection.connect();
-
-            conn.setAutoCommit(false);
-
-            int healing;
-
-            try (PreparedStatement pstmt = conn.prepareStatement(getHealingSql)) {
-
-                pstmt.setInt(1, playerId);
-                pstmt.setInt(2, itemId);
-
-                ResultSet result = pstmt.executeQuery();
-
-                if (!result.next()) {
-                    throw new SQLException(
-                            "Potion not found or quantity is 0."
-                    );
-                }
-
-                healing = result.getInt("healing");
-
-                if (healing <= 0) {
-                    throw new SQLException(
-                            "This item cannot heal the player."
-                    );
+            try(ResultSet rs = ps.executeQuery()){
+                if(rs.next()){
+                    return rs.getInt("quantity");
                 }
             }
 
-            try (PreparedStatement pstmt = conn.prepareStatement(consumePotionSql)) {
-
-                pstmt.setInt(1, playerId);
-                pstmt.setInt(2, itemId);
-
-                int rowsUpdated = pstmt.executeUpdate();
-
-                if (rowsUpdated == 0) {
-                    throw new SQLException(
-                            "Potion could not be consumed."
-                    );
-                }
-            }
-
-            try (PreparedStatement pstmt = conn.prepareStatement(updatePlayerHpSql)) {
-
-                pstmt.setInt(1, healing);
-                pstmt.setInt(2, playerId);
-
-                int rowsUpdated = pstmt.executeUpdate();
-
-                if (rowsUpdated == 0) {
-                    throw new SQLException(
-                            "Player not found."
-                    );
-                }
-            }
-
-            conn.commit();
-
-            System.out.println(
-                    "Potion consumed! Healing: +" + healing
-            );
-
-        } catch (SQLException e) {
-
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                    System.out.println("Transaction rolled back.");
-                } catch (SQLException rollbackException) {
-                    rollbackException.printStackTrace();
-                }
-            }
-
+        } catch(SQLException e){
             e.printStackTrace();
+        }
 
-        } finally {
+        return 0;
+    }
 
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+    public static void deleteEmptyInventoryEntry(int playerId, int itemId){
+
+        String sql = """
+                DELETE FROM inventory
+                WHERE player_id = ?
+                  AND item_id = ?
+                  AND quantity <= 0
+                """;
+        try(
+                Connection con = DatabaseConnection.connect();
+                PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+            ps.setInt(1, playerId);
+            ps.setInt(2, itemId);
+
+            ps.executeUpdate();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void removeOneItem(int playerId, int itemId){
+
+        String sql = """
+                UPDATE inventory
+                SET quantity = quantity - 1
+                WHERE player_id = ?
+                  AND item_id = ?
+                  AND quantity > 0
+                """;
+
+        try(
+                Connection con = DatabaseConnection.connect();
+                PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+            ps.setInt(1, playerId);
+            ps.setInt(2, itemId);
+
+            ps.executeUpdate();
+        } catch (SQLException e){
+            e.printStackTrace();
         }
     }
 }

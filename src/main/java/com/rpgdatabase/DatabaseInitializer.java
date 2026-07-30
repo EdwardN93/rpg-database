@@ -1,5 +1,6 @@
 package com.rpgdatabase;
 
+import com.rpgdatabase.enums.ItemType;
 import com.rpgdatabase.repository.InventoryRepository;
 import com.rpgdatabase.repository.ItemRepository;
 import com.rpgdatabase.repository.PlayerRepository;
@@ -114,7 +115,7 @@ public class DatabaseInitializer {
         PlayerRepository.addPlayer(10);
         ItemRepository.addItem(
                 "Rusty Sword",
-                "WEAPON",
+                ItemType.WEAPON,
                 10,
                 0,
                 "An old rusty sword. Better than fighting with bare hands.",
@@ -122,7 +123,7 @@ public class DatabaseInitializer {
 
         ItemRepository.addItem(
                 "Healing Potion",
-                "CONSUMABLE",
+                ItemType.CONSUMABLE,
                 0,
                 25,
                 "Restores 25 HP.",
@@ -130,7 +131,7 @@ public class DatabaseInitializer {
 
         ItemRepository.addItem(
                 "Old Bow",
-                "WEAPON",
+                ItemType.WEAPON,
                 15,
                 0,
                 "A very old bow.",

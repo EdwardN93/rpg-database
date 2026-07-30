@@ -5,3 +5,5 @@ public enum Attribute {
         DEXTERITY,
         MAX_MANA
 }
+
+
