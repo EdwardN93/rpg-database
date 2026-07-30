@@ -1,8 +1,8 @@
-# 🎮 RPG Database Manager
+# 🎮 RPG Backend System
 
-A Java learning project built to explore **JDBC**, **MariaDB**, and relational database design through an RPG-inspired database system.
+A Java backend learning project built to explore object-oriented programming, JDBC, MariaDB, and relational database design through an RPG-inspired application.
 
-Instead of generic examples like employees and departments, this project manages players, items, and inventories.
+Instead of using generic examples like employees and departments, this project simulates the backend of a role-playing game by managing players, items, inventories, consumables, and player progression.
 
 ---
 
@@ -23,22 +23,62 @@ Instead of generic examples like employees and departments, this project manages
 
 ---
 
-## ✨ Features
+# ✨ Features
 
-- Automatic database and table creation
+## Database
+
+- Automatic database creation
+- Automatic table creation
+- Optional seed data
+- Environment variable configuration (.env)
+
+## Player System
+
 - Player CRUD operations
-- RPG item management
-- Inventory system
+- Experience system
+- Level progression
+- Learning points
+- Strength training
+- HP and Mana management
+
+## Item System
+
+- Weapon support
+- Consumable support
+- Item values
+- Item descriptions
+- Generic item types using enums
+
+## Inventory System
+
+- Add items
+- Stackable quantities
+- Remove items
+- Automatic inventory cleanup
+- Inventory display using SQL JOINs
+
+## Consumable System
+
+- Generic consumable implementation
+- HP restoration
+- Mana restoration
+- Automatic inventory update after consumption
+- Maximum HP/Mana validation
+
+## Database Concepts
+
+- Prepared Statements
+- SQL CRUD operations
 - SQL JOINs
-- Primary & Foreign Keys
-- Seed data for testing
-- Database configuration using `.env`
+- Primary Keys
+- Foreign Keys
+- Relational database design
 
 ---
 
-## ⚙️ Configuration
+# ⚙️ Configuration
 
-Create a `.env` file in the project root:
+Create a `.env` file in the project root.
 
 ```text
 DB_SERVER_URL=jdbc:mariadb://localhost:3306
@@ -49,22 +89,22 @@ DB_PASSWORD=
 
 ---
 
-## ▶️ Running
+# ▶️ Running
 
 1. Clone the repository.
 2. Start MariaDB.
 3. Configure the `.env` file.
 4. Run `Main.java`.
 
-The application will automatically:
+The application automatically:
 
-- Create the `game_db` database
-- Create all required tables
-- Optionally insert sample RPG data
+- creates the database
+- creates all tables
+- optionally inserts sample data
 
 ---
 
-## 🗄️ Database
+# 🗄️ Database Schema
 
 ```
 Players
@@ -75,63 +115,83 @@ Items
 ```
 
 ### Players
+
 - Name
 - Level
 - Strength
-- HP / Mana
+- Current HP
+- Max HP
+- Current Mana
+- Max Mana
 - Experience
+- Learning Points
 - Armor
 
 ### Items
+
 - Name
 - Type
 - Damage
 - Healing
+- Mana Restore
 - Description
 - Value
 
 ### Inventory
+
 - Player
 - Item
 - Quantity
 
 ---
 
-## 📚 Concepts Practiced
+# 📚 Concepts Practiced
 
+- Object-Oriented Programming
+- Repository Pattern
+- Service Layer
 - JDBC
+- MariaDB
 - SQL CRUD
 - SQL JOINs
-- PreparedStatement
-- Relational database design
-- Primary & Foreign Keys
-- Database initialization
-- Environment variables
+- Prepared Statements
+- Environment Variables
+- Relational Database Design
+- Database Initialization
+- Enums
+- Business Logic Separation
 
 ---
 
-## 🏗️ Project Structure
+# 🏗️ Project Structure
 
 ```
-Main
+src
 │
-├── DatabaseConnection
-├── DatabaseInitializer
-└── DatabaseManager
+├── model
+├── repository
+├── service
+├── database
+├── enums
+└── Main.java
 ```
 
 ---
 
-## 🔮 Future Improvements
+# 🔮 Roadmap
 
-- SQL Transactions
-- Quest system
-- Monster system
-- Repository pattern
-- Improved inventory management
+- Equipment System
+- Enemy System
+- Combat System
+- Loot System
+- Merchant System
+- Quest System
+- NPC System
+- Character Selection
+- Save Game System
 
 ---
 
-## 🎯 Goal
+# 🎯 Goal
 
-Learn how Java applications communicate with relational databases using JDBC while building a small RPG-inspired backend project.
+The purpose of this project is to learn how Java backend applications communicate with relational databases while applying clean architecture principles and building increasingly complex gameplay systems.
